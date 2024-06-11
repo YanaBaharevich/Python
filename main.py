@@ -2,6 +2,8 @@ import pandas as pd
 import datetime
 import random
 import os
+import matplotlib.pyplot as plt
+
 
 #Dane podróży
 data = {
@@ -156,6 +158,33 @@ while True:
             print("Wystąpił błąd:", e)
     else:
         licznik_biletow += 1
+
+
+df=pd.read_excel('D:\\Python\\dane_podrozy.xlsx')
+stat=df.copy()
+stat.drop("Trasa",axis=1,inplace=True)
+stat.drop("Hotel",axis=1,inplace=True)
+stat.drop("Data_rezerwacji",axis=1,inplace=True)
+
+#1 wykres
+
+dane_miasto= df["Typ_podrozy"].value_counts()
+mst = dane_miasto.index
+lsc = dane_miasto.values
+def prepare_label(pct, allvals):
+    absolute = int(pct / 100. * sum(allvals))
+    return "{:.1f}%)".format(pct, absolute)
+wedges, _, autotexts = plt.pie(lsc, labels=mst, autopct=lambda pct: prepare_label(pct, lsc), textprops=dict(color="black"))
+plt.setp(autotexts, size=14, weight="bold")
+plt.legend(title='Miasta')
+plt.show()
+
+#2 wykres
+
+
+
+
+
 
 
 
