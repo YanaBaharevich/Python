@@ -3,7 +3,7 @@ import datetime
 import random
 import os
 import matplotlib.pyplot as plt
-
+import seaborn as sns
 
 #Dane podróży
 data = {
@@ -168,12 +168,12 @@ stat.drop("Data_rezerwacji",axis=1,inplace=True)
 
 #1 wykres
 
-dane_miasto= df["Typ_podrozy"].value_counts()
+dane_miasto= df["Miasto"].value_counts()
 mst = dane_miasto.index
 lsc = dane_miasto.values
 def prepare_label(pct, allvals):
     absolute = int(pct / 100. * sum(allvals))
-    return "{:.1f}%)".format(pct, absolute)
+    return "{:.1f}%".format(pct, absolute)
 wedges, _, autotexts = plt.pie(lsc, labels=mst, autopct=lambda pct: prepare_label(pct, lsc), textprops=dict(color="black"))
 plt.setp(autotexts, size=14, weight="bold")
 plt.legend(title='Miasta')
@@ -181,9 +181,30 @@ plt.show()
 
 #2 wykres
 
+barcelona_data = df[df['Miasto'] == 'Barcelona']
+paris_data = df[df['Miasto'] == 'Paryż']
+fig, axs = plt.subplots(2, 1, figsize=(10, 8))
 
+for typ_podrozy, color in [('Wakacje', 'b'), ('Służbowe', 'r')]:
+    barcelona_typ = barcelona_data[barcelona_data['Typ_podrozy'] == typ_podrozy]
+    axs[0].scatter(barcelona_typ.index, barcelona_typ['Cena_biletu'] + barcelona_typ['Koszt_noclegu'], color=color, label=typ_podrozy)
 
+axs[0].set_title('Barcelona')
+axs[0].set_xlabel('ID')
+axs[0].set_ylabel('Suma')
+axs[0].legend()
 
+for typ_podrozy, color in [('Wakacje', 'g'), ('Służbowe', 'm')]:
+    paris_typ = paris_data[paris_data['Typ_podrozy'] == typ_podrozy]
+    axs[1].scatter(paris_typ.index, paris_typ['Cena_biletu'] + paris_typ['Koszt_noclegu'], color=color, label=typ_podrozy)
+
+axs[1].set_title('Paryż')
+axs[1].set_xlabel('ID')
+axs[1].set_ylabel('Suma')
+axs[1].legend()
+
+plt.tight_layout()
+plt.show()
 
 
 
