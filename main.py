@@ -1,11 +1,10 @@
 import pandas as pd
-import datetime
 import random
 import os
 import matplotlib.pyplot as plt
-import seaborn as sns
+import numpy as np
 
-#Dane podróży
+
 data = {
     'ID': list(range(1, 48)),
     'Data_rezerwacji': ['2024-01-15', '2024-02-10', '2024-03-20', '2024-04-01', '2024-05-05',
@@ -179,31 +178,20 @@ plt.setp(autotexts, size=14, weight="bold")
 plt.legend(title='Miasta')
 plt.show()
 
+
 #2 wykres
+df_wakacje = df[df['Typ_podrozy'] == 'Wakacje'].copy()
+df_wakacje['Koszt_mieszkania'] = df_wakacje['Koszt_noclegu'] + df_wakacje['Cena_biletu']
+srednie_koszty = df_wakacje.groupby('Miasto')['Koszt_mieszkania'].mean().sort_values()
 
-barcelona_data = df[df['Miasto'] == 'Barcelona']
-paris_data = df[df['Miasto'] == 'Paryż']
-fig, axs = plt.subplots(2, 1, figsize=(10, 8))
-
-for typ_podrozy, color in [('Wakacje', 'b'), ('Służbowe', 'r')]:
-    barcelona_typ = barcelona_data[barcelona_data['Typ_podrozy'] == typ_podrozy]
-    axs[0].scatter(barcelona_typ.index, barcelona_typ['Cena_biletu'] + barcelona_typ['Koszt_noclegu'], color=color, label=typ_podrozy)
-
-axs[0].set_title('Barcelona')
-axs[0].set_xlabel('ID')
-axs[0].set_ylabel('Suma')
-axs[0].legend()
-
-for typ_podrozy, color in [('Wakacje', 'g'), ('Służbowe', 'm')]:
-    paris_typ = paris_data[paris_data['Typ_podrozy'] == typ_podrozy]
-    axs[1].scatter(paris_typ.index, paris_typ['Cena_biletu'] + paris_typ['Koszt_noclegu'], color=color, label=typ_podrozy)
-
-axs[1].set_title('Paryż')
-axs[1].set_xlabel('ID')
-axs[1].set_ylabel('Suma')
-axs[1].legend()
-
-plt.tight_layout()
+num_bars = len(srednie_koszty)
+colors = np.random.rand(num_bars, 3)  # Losowe kolory RGB
+plt.figure(figsize=(10, 8))
+srednie_koszty.plot(kind='barh', color=colors)
+plt.xlabel('Średni koszt mieszkania')
+plt.ylabel('Miasto')
+plt.title('Średni koszt mieszkania w różnych miastach (Typ podróży: Wakacje)')
+plt.grid(True)
 plt.show()
 
 
