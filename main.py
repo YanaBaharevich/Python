@@ -1,3 +1,7 @@
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+
 import pandas as pd
 import random
 import os
@@ -124,76 +128,88 @@ df.to_excel('dane_podrozy.xlsx', index=False)
 
 sciezka_do_pliku_excel = 'D:\\Python\\dane_podrozy.xlsx'
 
-licznik_biletow = 1
+def create_ticket():
+    licznik_biletow = 1
 
-while True:
-    nazwa_pliku = f"bilet_podrozy_{licznik_biletow}.txt"
-    if not os.path.exists(nazwa_pliku):
-        try:
-            losowy_indeks = random.choice(df.index)
-            losowa_podroz = df.loc[losowy_indeks]
+    while True:
+        nazwa_pliku = f"bilet_podrozy_{licznik_biletow}.txt"
+        if not os.path.exists(nazwa_pliku):
+            try:
+                losowy_indeks = random.choice(df.index)
+                losowa_podroz = df.loc[losowy_indeks]
 
-            with open(nazwa_pliku, 'w', encoding='utf-8') as file:
-                file.write("*" * 50 + "\n")
-                file.write("Bilet podróży\n")
-                file.write("*" * 50 + "\n")
-                file.write("Data rezerwacji: {}\n".format(losowa_podroz['Data_rezerwacji']))
-                file.write("_" * 50 + "\n")
-                file.write("Data wylotu: {}\n".format(losowa_podroz['Data_wylotu']))
-                file.write("_" * 50 + "\n")
-                file.write("Trasa: {}\n".format(losowa_podroz['Trasa']))
-                file.write("_" * 50 + "\n")
-                file.write("Linia lotnicza: {}\n".format(losowa_podroz['Linia_lotnicza']))
-                file.write("_" * 50 + "\n")
-                file.write("Klasa biletu: {}\n".format(losowa_podroz['Klasa_biletu']))
-                file.write("_" * 50 + "\n")
-                file.write("Cena biletu: {}\n".format(losowa_podroz['Cena_biletu']))
-                file.write("_" * 50 + "\n")
+                with open(nazwa_pliku, 'w', encoding='utf-8') as file:
+                    file.write("*" * 50 + "\n")
+                    file.write("Bilet podróży\n")
+                    file.write("*" * 50 + "\n")
+                    file.write("Data rezerwacji: {}\n".format(losowa_podroz['Data_rezerwacji']))
+                    file.write("_" * 50 + "\n")
+                    file.write("Data wylotu: {}\n".format(losowa_podroz['Data_wylotu']))
+                    file.write("_" * 50 + "\n")
+                    file.write("Trasa: {}\n".format(losowa_podroz['Trasa']))
+                    file.write("_" * 50 + "\n")
+                    file.write("Linia lotnicza: {}\n".format(losowa_podroz['Linia_lotnicza']))
+                    file.write("_" * 50 + "\n")
+                    file.write("Klasa biletu: {}\n".format(losowa_podroz['Klasa_biletu']))
+                    file.write("_" * 50 + "\n")
+                    file.write("Cena biletu: {}\n".format(losowa_podroz['Cena_biletu']))
+                    file.write("_" * 50 + "\n")
 
-            print(f"Bilet podróży został utworzony w pliku '{nazwa_pliku}'.")
+                messagebox.showinfo("Sukces", f"Bilet zostal stworzony w pliku '{nazwa_pliku}'.")
+                licznik_biletow += 1
+                break
+            except Exception as e:
+                messagebox.showerror("Bląd", f"nieoczekiwany błąd: {e}")
+        else:
             licznik_biletow += 1
-            break
-        except Exception as e:
-            print("Wystąpił błąd:", e)
-    else:
-        licznik_biletow += 1
-
 
 df=pd.read_excel('D:\\Python\\dane_podrozy.xlsx')
-stat=df.copy()
-stat.drop("Trasa",axis=1,inplace=True)
-stat.drop("Hotel",axis=1,inplace=True)
-stat.drop("Data_rezerwacji",axis=1,inplace=True)
 
 #1 wykres
 
-dane_miasto= df["Miasto"].value_counts()
-mst = dane_miasto.index
-lsc = dane_miasto.values
-def prepare_label(pct, allvals):
-    absolute = int(pct / 100. * sum(allvals))
-    return "{:.1f}%".format(pct, absolute)
-wedges, _, autotexts = plt.pie(lsc, labels=mst, autopct=lambda pct: prepare_label(pct, lsc), textprops=dict(color="black"))
-plt.setp(autotexts, size=14, weight="bold")
-plt.legend(title='Miasta')
-plt.show()
-
+def show_plot1():
+    dane_miasto = df["Miasto"].value_counts()
+    mst = dane_miasto.index
+    lsc = dane_miasto.values
+    fig, ax = plt.subplots()
+    ax.pie(lsc, labels=mst, autopct='%1.1f%%')
+    ax.set_title('Miasta')
+    plt.show()
 
 #2 wykres
-df_wakacje = df[df['Typ_podrozy'] == 'Wakacje'].copy()
-df_wakacje['Koszt_mieszkania'] = df_wakacje['Koszt_noclegu'] + df_wakacje['Cena_biletu']
-srednie_koszty = df_wakacje.groupby('Miasto')['Koszt_mieszkania'].mean().sort_values()
+def show_plot2():
+    df_wakacje = df[df['Typ_podrozy'] == 'Wakacje'].copy()
+    df_wakacje['Koszt_mieszkania'] = df_wakacje['Koszt_noclegu'] + df_wakacje['Cena_biletu']
+    srednie_koszty = df_wakacje.groupby('Miasto')['Koszt_mieszkania'].mean().sort_values()
 
-num_bars = len(srednie_koszty)
-colors = np.random.rand(num_bars, 3)  # Losowe kolory RGB
-plt.figure(figsize=(10, 8))
-srednie_koszty.plot(kind='barh', color=colors)
-plt.xlabel('Średni koszt mieszkania')
-plt.ylabel('Miasto')
-plt.title('Średni koszt mieszkania w różnych miastach (Typ podróży: Wakacje)')
-plt.grid(True)
-plt.show()
+    num_bars = len(srednie_koszty)
+    colors = np.random.rand(num_bars, 3)  # Losowe kolory RGB
+    plt.figure(figsize=(10, 8))
+    srednie_koszty.plot(kind='barh', color=colors)
+    plt.xlabel('Średni koszt mieszkania')
+    plt.ylabel('Miasto')
+    plt.title('Średni koszt mieszkania w różnych miastach (Typ podróży: Wakacje)')
+    plt.grid(True)
+    plt.show()
 
 
+root = tk.Tk()
+root.title("Moja aplikacja")
 
+frm = ttk.Frame(root, padding=10)
+frm.grid()
+
+btn_create_ticket = ttk.Button(frm, text="Stworzyć bilet", command=create_ticket)
+btn_create_ticket.grid(column=0, row=0, padx=5, pady=5)
+
+btn_plot1 = ttk.Button(frm, text="Wykres popularności krajów", command=show_plot1)
+btn_plot1.grid(column=1, row=0, padx=5, pady=5)
+
+btn_plot2 = ttk.Button(frm, text="Srednia koszt wakacji w krajach", command=show_plot2)
+btn_plot2.grid(column=2, row=0, padx=5, pady=5)
+
+btn_quit = ttk.Button(frm, text="Exit", command=root.destroy)
+btn_quit.grid(column=3, row=0, padx=5, pady=5)
+
+root.mainloop()
 
