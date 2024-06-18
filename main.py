@@ -205,7 +205,7 @@ btn_create_ticket.grid(column=0, row=0, padx=5, pady=5)
 btn_plot1 = ttk.Button(frm, text="Wykres popularności krajów", command=show_plot1)
 btn_plot1.grid(column=1, row=0, padx=5, pady=5)
 
-btn_plot2 = ttk.Button(frm, text="Srednia koszt wakacji w krajach", command=show_plot2)
+btn_plot2 = ttk.Button(frm, text="Sredni koszt wakacji w krajach", command=show_plot2)
 btn_plot2.grid(column=2, row=0, padx=5, pady=5)
 
 btn_quit = ttk.Button(frm, text="Exit", command=root.destroy)
