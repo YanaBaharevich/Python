@@ -4,7 +4,6 @@ from tkinter import messagebox
 
 import pandas as pd
 import random
-import os
 import matplotlib.pyplot as plt
 import numpy as np
 
