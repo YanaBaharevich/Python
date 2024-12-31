@@ -69,6 +69,12 @@ class Aplikacja:
         else:
             self.sjf()
 
+        def sjf(self):
+            self.zadania.sort(key=lambda x: x['czas'])
+            harmonogram = "\n".join([f"{zadanie['imie']} - {zadanie['czas']} min" for zadanie in self.zadania])
+            messagebox.showinfo("Harmonogram prania", f"Zadania (po SJF):\n{harmonogram}")
+            self.root.quit()
+
 
 root = tk.Tk()
 app = Aplikacja(root)
