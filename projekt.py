@@ -70,7 +70,6 @@ class Aplikacja:
             self.sjf()
 
 
-
 root = tk.Tk()
 app = Aplikacja(root)
 root.mainloop()
