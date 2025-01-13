@@ -109,3 +109,33 @@ print("\nMnożenie macierzy:")
 print(system_operacji_na_macierzach("mnozenie",macierz1,macierz2))
 print("\nTransponowanie macierzy:")
 print(system_operacji_na_macierzach("transponowanie",macierz1))
+
+
+# Zadanie 4 Implementacja Złożonej Funkcji Matrycowej z Użyciem reduce()
+from functools import reduce
+
+def polacz_macierze(lista_macierzy, operacja):
+    if not lista_macierzy:
+        raise ValueError("Lista macierzy jest pusta.")
+    def operacja_na_macierzach(x, y):
+        try:
+            wynik=eval(operacja)
+            return wynik
+        except Exception as e:
+            raise ValueError(f"Błąd podczas wykonywania operacji: {e}")
+
+    return reduce(operacja_na_macierzach, lista_macierzy)
+
+macierz1 = np.array([[1, 2], [3, 4]])
+macierz2 = np.array([[5, 6], [7, 8]])
+macierz3 = np.array([[2, 2], [2, 2]])
+lista_macierzy = [macierz1, macierz2, macierz3]
+try:
+    print("Sumowanie macierzy:")
+    wynik_suma = polacz_macierze(lista_macierzy,"x + y")
+    print(wynik_suma)
+    print("\nMnożenie macierzy (iloczyn macierzowy):")
+    wynik_iloczyn = polacz_macierze(lista_macierzy,"np.dot(x, y)")
+    print(wynik_iloczyn)
+except ValueError as e:
+    print(e)
