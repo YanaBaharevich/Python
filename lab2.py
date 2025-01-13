@@ -63,4 +63,49 @@ print(f"Największa liczba: {najwieksza_liczba}")
 print(f"Najdłuższy napis: {najdluzszy_napis}")
 print(f"Krotka z największą liczbą elementów: {najwieksza_krotka}")
 
+# Zadanie 2: Walidacja i Przekształcenia Operacji na Macierzach
 
+def waliduj_operacje(macierz1,macierz2=None,operacja="dodawanie"):
+    if operacja=="dodawanie" or operacja=="odejmowanie":
+        if macierz1.shape !=macierz2.shape:
+            raise ValueError("Macierze muszą mieć te same wymiary do dodawania lub odejmowania")
+    elif operacja == "mnozenie":
+        if macierz1.shape[1] !=macierz2.shape[0]:
+            raise ValueError("Liczba kolumn macierzy pierwszej musi być równa liczbie wierszy macierzy drugiej")
+    elif operacja =="transponowanie":
+        pass
+    else:
+        raise ValueError(f"Nieznana operacja: {operacja}")
+
+def wykonaj_operacje(macierz1,macierz2=None,operacja="dodawanie"):
+    if operacja=="dodawanie":
+        wynik=np.add(macierz1, macierz2)
+    elif operacja=="odejmowanie":
+        wynik=np.subtract(macierz1, macierz2)
+    elif operacja=="mnozenie":
+        wynik=np.dot(macierz1, macierz2)
+    elif operacja=="transponowanie":
+        wynik=np.transpose(macierz1)
+    else:
+        raise ValueError(f"Nieznana operacja:{operacja}")
+    return wynik
+
+def system_operacji_na_macierzach(operacja,macierz1,macierz2=None):
+    try:
+        waliduj_operacje(macierz1,macierz2,operacja)
+        wynik = wykonaj_operacje(macierz1,macierz2,operacja)
+        return wynik
+    except ValueError as e:
+        return f"Błąd:{e}"
+
+macierz1 = np.array([[1, 2], [3, 4]])
+macierz2 = np.array([[5, 6], [7, 8]])
+
+print("Dodawanie macierzy:")
+print(system_operacji_na_macierzach("dodawanie",macierz1,macierz2))
+print("\nOdejmowanie macierzy:")
+print(system_operacji_na_macierzach("odejmowanie",macierz1,macierz2))
+print("\nMnożenie macierzy:")
+print(system_operacji_na_macierzach("mnozenie",macierz1,macierz2))
+print("\nTransponowanie macierzy:")
+print(system_operacji_na_macierzach("transponowanie",macierz1))
