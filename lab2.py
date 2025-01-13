@@ -43,7 +43,24 @@ for i in x:
     y.append(i[::-1])
 print('Odwrotna kolejność: ', y)
 
+# Zadanie 3. Dynamiczne Wyznaczanie Ekstremów w Niejednorodnych
 
+def analiza_danych(dane):
+    liczby = list(filter(lambda x:isinstance(x, (int, float)), dane))
+    max_liczba = max(liczby)
+    napisy = list(filter(lambda x:isinstance(x, str), dane))
+    najdluzszy_napis = max(napisy,key=len)
+    krotki = list(filter(lambda x:isinstance(x, tuple), dane))
+    najwieksza_krotka = max(krotki,key=len)
+    return max_liczba, najdluzszy_napis, najwieksza_krotka
 
+dane_wejsciowe=[
+    42,"napis",(1, 2, 3),[10, 20],3.14,
+    "najdluzszy napis w zestawie",{"klucz": "wartosc"},(1, 2, 3, 4),-15
+]
+najwieksza_liczba,najdluzszy_napis,najwieksza_krotka=analiza_danych(dane_wejsciowe)
+print(f"Największa liczba: {najwieksza_liczba}")
+print(f"Najdłuższy napis: {najdluzszy_napis}")
+print(f"Krotka z największą liczbą elementów: {najwieksza_krotka}")
 
 
