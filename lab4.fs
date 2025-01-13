@@ -43,3 +43,29 @@ let main argv =
 
 //zad 2
 
+open System
+let kursyWymiany = 
+    Map [
+        ("USD", 1.0);      
+        ("PLN", 4.1);
+        ("EUR", 0.92);     
+        ("GBP", 0.82);]
+
+let konwertujWalute (kwota: float) (walutaZrodlowa: string) (walutaDocelowa: string) : float =
+    match kursyWymiany.TryFind(walutaZrodlowa), kursyWymiany.TryFind(walutaDocelowa) with
+    | Some(kursZrodlowy), Some(kursDocelowy) ->
+        let kwotaWUSD = kwota / kursZrodlowy
+        kwotaWUSD * kursDocelowy
+    | _ -> 
+        printfn "Błąd"
+        -1.0
+
+let main () =
+    printf "Podaj kwotę do przeliczenia: "
+    let kwota = Console.ReadLine()
+    printf "Podaj walutę źródłową (np. USD, EUR, GBP): "
+    let walutaZrodlowa = Console.ReadLine()
+    printf "Podaj walutę docelową (np. USD, EUR, GBP): "
+    let walutaDocelowa = Console.ReadLine()
+    przeliczWalute kwota walutaZrodlowa walutaDocelowa
+main()
