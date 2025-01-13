@@ -67,5 +67,42 @@ let main () =
     let walutaZrodlowa = Console.ReadLine()
     printf "Podaj walutę docelową (np. USD, EUR, GBP): "
     let walutaDocelowa = Console.ReadLine()
-    przeliczWalute kwota walutaZrodlowa walutaDocelowa
+    przeliczWalute kwota walfefautaZrodlowa walutaDocelowa
 main()
+
+// zad 3
+
+open System
+open System.Collections.Generic
+
+let analizujTekst(tekst: string) =
+    let slowa = tekst.Split([|' ';'\t'; '\n'; '\r'; '.'; ',';';'; ':';'!'; '?'|], StringSplitOptions.RemoveEmptyEntries)
+    let liczbaSlow = slowa.Length
+    let liczbaZnakow = tekst.Replace(" ", "").Length
+    let czestotliwoscSlow = 
+        slowa
+        |> Array.fold (fun mapa slowo -> 
+            if Map.containsKey slowo mapa then
+                Map.add slowo (mapa.[slowo] + 1) mapa
+            else
+                Map.add slowo 1 mapa
+        ) Map.empty
+    let najczestszeSlowo =
+    let mutable najczestsze = ""
+    let mutable maksCzestotliwosc = 0
+    for KeyValue(slowo, czestotliwosc) in czestotliwoscSlow do
+        if czestotliwosc > maksCzestotliwosc then
+            najczestsze <- slowo
+            maksCzestotliwosc <- czestotliwosc
+    najczestsze
+
+[<EntryPoint>]
+let main argv =
+    printfn "Podaj tekst do analizy:"
+    let tekst = Console.ReadLine()
+    let liczbaSlow, liczbaZnakow, najczestszeSlowo = analizujTekst tekst
+    printfn "Liczba słów: %d" liczbaSlow
+    printfn "Liczba znaków: %d" liczbaZnakow
+    printfn "Najczęściej występujące słowo: %s" najczestszeSlowo
+    0
+
