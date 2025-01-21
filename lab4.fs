@@ -1,6 +1,6 @@
 //Zad 1
 
-pen System
+open System
 
 type User = {
     Weight: float
