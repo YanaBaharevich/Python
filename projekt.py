@@ -11,7 +11,6 @@ class Aplikacja:
         self.zadania = []
         self.indeks_osoba = 0
 
-        # Interfejs
         self.root.geometry("500x400")
         self.label = tk.Label(root, text="Ilość osób chętnych:")
         self.label.pack(pady=20)
@@ -48,7 +47,7 @@ class Aplikacja:
             else:
                 self.label.config(text=f"Czas prania dla {self.zadania[0]['imie']} (min):")
                 self.entry.delete(0, tk.END)
-                self.indeks_osoba = 0  # Resetujemy
+                self.indeks_osoba = 0
                 self.next_button.config(command=self.czas_prania)
 
     def czas_prania(self):
@@ -69,11 +68,11 @@ class Aplikacja:
         else:
             self.sjf()
 
-        def sjf(self):
-            self.zadania.sort(key=lambda x: x['czas'])
-            harmonogram = "\n".join([f"{zadanie['imie']} - {zadanie['czas']} min" for zadanie in self.zadania])
-            messagebox.showinfo("Harmonogram prania", f"Zadania (po SJF):\n{harmonogram}")
-            self.root.quit()
+    def sjf(self):
+        self.zadania.sort(key=lambda x: x['czas'])
+        harmonogram = "\n".join([f"{zadanie['imie']} - {zadanie['czas']} min" for zadanie in self.zadania])
+        messagebox.showinfo("Harmonogram prania", f"Zadania (po SJF):\n{harmonogram}")
+        self.root.quit()
 
 
 root = tk.Tk()
